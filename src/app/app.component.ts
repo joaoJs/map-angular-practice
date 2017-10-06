@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MarkerService } from './services/marker.service';
 
 @Component({
   selector: 'app-root',
@@ -6,24 +7,34 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
+  markers: any[];
+
+  constructor(
+    private markerService: MarkerService
+  ) {
+    this.markers = this.markerService.getMarkers();
+  }
+
   title = 'app';
   lat: number = 25.7617;
   lng: number = -80.1918;
   zoom: number = 15;
-  markers: any[] = [
-  {
-    name: "miami",
-    lat: this.lat,
-    lng: this.lng,
-    draggable: true
-  },
-  {
-    name: "sao paulo",
-    lat: -23.5505199,
-    lng: -46.63330939999999,
-    draggable: true
-  },
-  ];
+
+  // markers: any[] = [
+  // {
+  //   name: "miami",
+  //   lat: this.lat,
+  //   lng: this.lng,
+  //   draggable: true
+  // },
+  // {
+  //   name: "sao paulo",
+  //   lat: -23.5505199,
+  //   lng: -46.63330939999999,
+  //   draggable: true
+  // }
+  // ];
 
   newMarker: any = {};
 
@@ -58,6 +69,26 @@ export class AppComponent {
     }
 
     this.markers.push(this.newMarker);
+    this.markerService.addMarker(this.newMarker);
+  }
+
+  markerDragEnd(marker: any,index: number, $event: any) {
+    console.log('Dragend -> ', marker, $event);
+
+    const upMarker = {
+      name: marker.name,
+      lat: parseFloat(marker.lat),
+      lng: parseFloat(marker.lng),
+      draggable: marker.draggable
+    }
+
+    console.log("UPMARKER ---> ",   upMarker);
+
+    const newLat = $event.coords.lat;
+    const newLng = $event.coords.lng;
+
+    this.markerService.updateMarker(upMarker,index, newLat, newLng);
+
   }
 
 }

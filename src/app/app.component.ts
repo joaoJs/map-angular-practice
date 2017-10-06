@@ -10,6 +10,8 @@ export class AppComponent {
 
   markers: any[];
 
+
+
   constructor(
     private markerService: MarkerService
   ) {
@@ -36,6 +38,19 @@ export class AppComponent {
   // }
   // ];
 
+   stations: any = [
+       {lat: 25.7810171, lng: -80.19628360000002},
+       {lat: 25.776034, lng: -80.196061},
+       {lat: 25.7638502, lng: -80.195425},
+       {lat: 25.7497383, lng: -80.211783},
+       {lat: 25.7397915, lng: -80.2388733},
+       {lat: 25.7329031, lng: -80.25484279999999},
+       {lat: 25.7148675, lng: -80.2770295},
+       {lat: 25.7050916, lng: -80.2890178},
+       {lat: 25.6919369, lng: -80.3051089},
+       {lat: 25.6850431, lng: -80.3136722}
+    ];
+
   newMarker: any = {};
 
   markerName: string = "";
@@ -61,11 +76,17 @@ export class AppComponent {
 
   addMarker() {
     console.log('Adding Marker.');
+    let bool = false;
+    if (this.markerDraggable === 'Yes') {
+      bool = true;
+    } else {
+      bool = false;
+    }
     this.newMarker = {
       name: this.markerName,
       lat: parseFloat(this.markerLat),
       lng: parseFloat(this.markerLng),
-      draggable: this.markerDraggable
+      draggable: bool
     }
 
     this.markers.push(this.newMarker);

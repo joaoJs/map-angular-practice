@@ -25,7 +25,13 @@
     (markerClick)="markerClicked(m,i)"
     [markerDraggable]="m.draggable"
     (dragEnd)="markerDragEnd(m,i,$event)"
-    ></agm-marker>
+    >
+      <agm-info-window>
+         <strong>{{m.name}}</strong>
+         <br>
+         <a class="delete" (click)="removeMarker(m,i)">Delete</a>
+      </agm-info-window>
+    </agm-marker>
   </agm-map>
 
   <div class="row">

@@ -91,4 +91,10 @@ export class AppComponent {
 
   }
 
+  removeMarker(marker: any, index: number) {
+    console.log('Removing marker...');
+    this.markers.splice(index,1);
+    this.markerService.removeMarker(index);
+  }
+
 }

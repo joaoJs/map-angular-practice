@@ -37,13 +37,12 @@ export class MarkerService extends Init {
 
       console.log("Marker ---> ", markers[index]);
 
-      /*markers.forEach(m => {
-        if (m.lat === marker.lat && m.lng === marker.lng) {
-          marker.lat = newLat;
-          marker.lng = newLng;
-        }
-      });*/
+      localStorage.setItem('markers', JSON.stringify(markers));
+    }
 
+    removeMarker(index: number) {
+      const markers = JSON.parse(localStorage.getItem('markers'));
+      markers.splice(index,1);
       localStorage.setItem('markers', JSON.stringify(markers));
     }
 

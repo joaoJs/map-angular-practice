@@ -1,0 +1,65 @@
+<!--The content below is only a placeholder and can be replaced.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet"
+    href="https://bootswatch.com/simplex/bootstrap.min.css">
+  <title>Document</title>
+</head>
+<body>
+
+  <h1> Map Practice </h1>
+
+  <agm-map
+    [latitude]="lat"
+    [longitude]="lng"
+    [zoom]="zoom"
+    (mapClick)="mapClicked($event)">
+    <agm-marker *ngFor="let m of markers; let i = index"
+    [latitude]="m.lat"
+    [longitude]="m.lng"
+    (markerClick)="markerClicked(m,i)"
+    ></agm-marker>
+  </agm-map>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title"> Add New Marker </h3>
+        </div>
+        <div class="panel-body">
+          <form (ngSubmit)="addMarker()">
+              <label> Location Name </label>
+              <input type="text" [(ngModel)]="markerName" name="markerName">
+
+              <label> Latitude </label>
+              <input type="text" [(ngModel)]="markerLat" name="markerLat">
+
+              <label> Longitude </label>
+              <input type="text" [(ngModel)]="markerLng" name="markerLng">
+
+              <label> Draggable </label>
+              <select [(ngModel)]="markerDraggable" name="markerDraggable">
+
+                <option value="No"> No</option>
+                <option value="Yes"> Yes</option>
+
+              </select>
+              <button> Map it! </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AIzaSyBZmlw9qWUNZvc1jbUEZ8HQXHGTHXe3Jm4 -->
+
+  <router-outlet></router-outlet>
+
+</body>
+</html>

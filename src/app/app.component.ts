@@ -149,6 +149,15 @@ export class AppComponent {
           const lat = response['results'][0].geometry.location.lat;
           const lng = response['results'][0].geometry.location.lng;
           this.addMarker(loc,lat,lng);
+          this.markerService.getDistance(String(lat),String(lng),String(this.stations[0].lat), String(this.stations[0].lng))
+            .subscribe(
+              (data) => {
+                console.log("Distance data! ---> ", data);
+              },
+              (err) => {
+                console.log(err);
+              }
+            )
         },
         (err) => {
           console.log(err);

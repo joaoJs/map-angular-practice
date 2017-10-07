@@ -10,7 +10,13 @@ export class AppComponent {
 
   markers: any[];
 
+  color: string = 'rgb(255,0,0)';
+
+  colorNew: string = 'rgb(0,0,255)';
+
   locationName: string = "";
+
+  destinationName: string = "";
 
   data: any = {};
 
@@ -40,7 +46,7 @@ export class AppComponent {
   // }
   // ];
 
-   stations: any = [
+   stations: any[] = [
        {lat: 25.7810171, lng: -80.19628360000002},
        {lat: 25.776034, lng: -80.196061},
        {lat: 25.7638502, lng: -80.195425},
@@ -52,6 +58,21 @@ export class AppComponent {
        {lat: 25.6919369, lng: -80.3051089},
        {lat: 25.6850431, lng: -80.3136722}
     ];
+
+   newStations: any[] = [
+      {lat: 25.6850431, lng: -80.3136722},
+      {lat: 25.644235, lng: -80.3383722},
+      {lat: 25.6298189, lng: -80.3457406},
+      {lat: 25.6104121, lng: -80.359949},
+      {lat: 25.6071269, lng: -80.39927949999999}
+    ]
+
+    newStationsNorth = [
+      {lat: 25.7810171, lng: -80.19628360000002},
+      {lat: 25.8011729, lng: -80.20023049999999},
+      {lat: 25.8081475, lng: -80.1936675},
+      {lat: 25.8134218, lng: -80.1934285}
+    ]
 
   newMarker: any = {};
 
@@ -122,6 +143,21 @@ export class AppComponent {
 
   submitOrigin() {
     this.markerService.getOrigin(this.locationName)
+      .subscribe(
+        (response) => {
+          const loc = response['results'][0].formatted_address;
+          const lat = response['results'][0].geometry.location.lat;
+          const lng = response['results'][0].geometry.location.lng;
+          this.addMarker(loc,lat,lng);
+        },
+        (err) => {
+          console.log(err);
+        }
+      )
+  }
+
+  submitDestination() {
+    this.markerService.getDestination(this.destinationName)
       .subscribe(
         (response) => {
           const loc = response['results'][0].formatted_address;

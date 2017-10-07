@@ -32,9 +32,26 @@
          <a class="delete" (click)="removeMarker(m,i)">Delete</a>
       </agm-info-window>
     </agm-marker>
-    <agm-polyline>
+    <agm-polyline
+      [strokeColor]="color">
       <agm-polyline-point
       *ngFor="let s of stations"
+      [latitude]="s.lat"
+      [longitude]="s.lng">
+      </agm-polyline-point>
+    </agm-polyline>
+    <agm-polyline
+      [strokeColor]="colorNew">
+      <agm-polyline-point
+      *ngFor="let s of newStations"
+      [latitude]="s.lat"
+      [longitude]="s.lng">
+      </agm-polyline-point>
+    </agm-polyline>
+    <agm-polyline
+      [strokeColor]="colorNew">
+      <agm-polyline-point
+      *ngFor="let s of newStationsNorth"
       [latitude]="s.lat"
       [longitude]="s.lng">
       </agm-polyline-point>
@@ -81,9 +98,9 @@
           <h3 class="panel-title"> Destination </h3>
         </div>
         <div class="panel-body">
-          <form (ngSubmit)="addMarker()">
+          <form (ngSubmit)="submitDestination()">
               <label> Location Name </label>
-              <input type="text" [(ngModel)]="markerName" name="markerName">
+              <input type="text" [(ngModel)]="destinationName" name="destinationName">
 
               <label> Latitude </label>
               <input type="text" [(ngModel)]="markerLat" name="markerLat">

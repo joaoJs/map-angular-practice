@@ -56,4 +56,8 @@ export class MarkerService extends Init {
       return this.http.get(this.geoUrl + '?address=' + location + '&key=' + this.key);
     }
 
+    getDestination(location: string) {
+      return this.http.get(this.geoUrl + '?address=' + location + '&key=' + this.key);
+    }
+
 }

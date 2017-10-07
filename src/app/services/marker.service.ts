@@ -1,10 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Init } from '../init-markers';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class MarkerService extends Init {
 
+  geoUrl:string = 'https://maps.googleapis.com/maps/api/geocode/json';
+
+  key: string = 'AIzaSyBZmlw9qWUNZvc1jbUEZ8HQXHGTHXe3Jm4';
+
   constructor(
+    private http: HttpClient
   ) {
     super();
     console.log("MarkerService Initialized");
@@ -44,6 +50,10 @@ export class MarkerService extends Init {
       const markers = JSON.parse(localStorage.getItem('markers'));
       markers.splice(index,1);
       localStorage.setItem('markers', JSON.stringify(markers));
+    }
+
+    getOrigin(location: string) {
+      return this.http.get(this.geoUrl + '?address=' + location + '&key=' + this.key);
     }
 
 }

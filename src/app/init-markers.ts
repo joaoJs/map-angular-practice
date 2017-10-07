@@ -8,14 +8,14 @@ export class Init {
           {
             name: "miami",
             lat: 25.7617,
-            lng: -80.1918,
-            draggable: true
+            lng: -80.1918
+            //draggable: true
           },
           {
             name: "sao paulo",
             lat: -23.5505199,
-            lng: -46.63330939999999,
-            draggable: true
+            lng: -46.63330939999999
+            //draggable: true
           }
         ];
 

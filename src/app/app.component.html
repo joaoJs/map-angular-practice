@@ -33,7 +33,10 @@
       </agm-info-window>
     </agm-marker>
     <agm-polyline>
-      <agm-polyline-point *ngFor="let m of stations" [latitude]="m.lat" [longitude]="m.lng">
+      <agm-polyline-point
+      *ngFor="let s of stations"
+      [latitude]="s.lat"
+      [longitude]="s.lng">
       </agm-polyline-point>
     </agm-polyline>
     <!-- <agm-polyline>
@@ -49,7 +52,33 @@
     <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title"> Add New Marker </h3>
+          <h3 class="panel-title"> Origin </h3>
+        </div>
+        <div class="panel-body">
+          <form (ngSubmit)="submitOrigin()">
+              <label> Location Name </label>
+              <input type="text" [(ngModel)]="locationName" name="locationName">
+
+              <label> Latitude </label>
+              <input type="text" [(ngModel)]="markerLat" name="markerLat">
+
+              <label> Longitude </label>
+              <input type="text" [(ngModel)]="markerLng" name="markerLng">
+
+              <label> Draggable </label>
+              <select [(ngModel)]="markerDraggable" name="markerDraggable">
+
+                <option value="No"> No</option>
+                <option value="Yes"> Yes</option>
+
+              </select>
+              <button> Map it! </button>
+          </form>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title"> Destination </h3>
         </div>
         <div class="panel-body">
           <form (ngSubmit)="addMarker()">

@@ -10,7 +10,9 @@ export class AppComponent {
 
   markers: any[];
 
+  locationName: string = "";
 
+  data: any = {};
 
   constructor(
     private markerService: MarkerService
@@ -21,7 +23,7 @@ export class AppComponent {
   title = 'app';
   lat: number = 25.7617;
   lng: number = -80.1918;
-  zoom: number = 15;
+  zoom: number = 10;
 
   // markers: any[] = [
   // {
@@ -56,7 +58,7 @@ export class AppComponent {
   markerName: string = "";
   markerLat: string = "";
   markerLng: string = "";
-  markerDraggable: string = "No";
+  //markerDraggable: string = "No";
 
   markerClicked(marker: any, index: number) {
     console.log(marker.name + " was clicked at " + index + " position.");
@@ -67,26 +69,26 @@ export class AppComponent {
     this.newMarker = {
       name: 'Untitled',
       lat: $event.coords.lat,
-      lng: $event.coords.lng,
-      draggable: false
+      lng: $event.coords.lng
+      //draggable: false
     }
 
   this.markers.push(this.newMarker);
   }
 
-  addMarker() {
+  addMarker(location: string, lat: number, lng: number) {
     console.log('Adding Marker.');
-    let bool = false;
-    if (this.markerDraggable === 'Yes') {
-      bool = true;
-    } else {
-      bool = false;
-    }
+    // let bool = false;
+    // if (this.markerDraggable === 'Yes') {
+    //   bool = true;
+    // } else {
+    //   bool = false;
+    // }
     this.newMarker = {
-      name: this.markerName,
-      lat: parseFloat(this.markerLat),
-      lng: parseFloat(this.markerLng),
-      draggable: bool
+      name: location,
+      lat: lat,
+      lng: lng
+      //draggable: bool
     }
 
     this.markers.push(this.newMarker);
@@ -99,8 +101,8 @@ export class AppComponent {
     const upMarker = {
       name: marker.name,
       lat: parseFloat(marker.lat),
-      lng: parseFloat(marker.lng),
-      draggable: marker.draggable
+      lng: parseFloat(marker.lng)
+      //draggable: marker.draggable
     }
 
     console.log("UPMARKER ---> ",   upMarker);
@@ -116,6 +118,21 @@ export class AppComponent {
     console.log('Removing marker...');
     this.markers.splice(index,1);
     this.markerService.removeMarker(index);
+  }
+
+  submitOrigin() {
+    this.markerService.getOrigin(this.locationName)
+      .subscribe(
+        (response) => {
+          const loc = response['results'][0].formatted_address;
+          const lat = response['results'][0].geometry.location.lat;
+          const lng = response['results'][0].geometry.location.lng;
+          this.addMarker(loc,lat,lng);
+        },
+        (err) => {
+          console.log(err);
+        }
+      )
   }
 
 }

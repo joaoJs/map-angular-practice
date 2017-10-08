@@ -24,6 +24,8 @@ export class AppComponent {
 
   sortedDistances: number[] = [];
 
+  closestMessage: string = '';
+
   constructor(
     private markerService: MarkerService
   ) {
@@ -191,7 +193,7 @@ export class AppComponent {
                 const distArray = data['rows'][0].elements;
                 this.sortedDistances = distArray.map((d,i) => [Number((d.distance.text).slice(0,-3)), i])
                   .sort((a,b) => a[0] - b[0]);
-                console.log(`The closest station is ${this.stationsObj[this.sortedDistances[0][1]]}.`);
+                this.closestMessage = `The closest station is ${this.stationsObj[this.sortedDistances[0][1]]} and the distance is ${this.sortedDistances[0][0]} km.`;
               },
               (err) => {
                 console.log("err --> ", err);

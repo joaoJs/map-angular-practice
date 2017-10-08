@@ -121,6 +121,10 @@
     </div>
   </div>
 
+  <div *ngIf="closestMessage !== ''">
+    <p>{{closestMessage}}</p>
+  </div>
+
   <!-- AIzaSyBZmlw9qWUNZvc1jbUEZ8HQXHGTHXe3Jm4 -->
 
   <router-outlet></router-outlet>

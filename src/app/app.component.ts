@@ -24,7 +24,9 @@ export class AppComponent {
 
   sortedDistances: number[] = [];
 
-  closestMessage: string = '';
+  closestMessageOrigin: string = '';
+
+  closestMessageDest: string = '';
 
   constructor(
     private markerService: MarkerService
@@ -193,7 +195,7 @@ export class AppComponent {
                 const distArray = data['rows'][0].elements;
                 this.sortedDistances = distArray.map((d,i) => [Number((d.distance.text).slice(0,-3)), i])
                   .sort((a,b) => a[0] - b[0]);
-                this.closestMessage = `The closest station is ${this.stationsObj[this.sortedDistances[0][1]]} and the distance is ${this.sortedDistances[0][0]} km.`;
+                this.closestMessageOrigin = `The closest station to your origin is ${this.stationsObj[this.sortedDistances[0][1]]} and the distance is ${this.sortedDistances[0][0]} km.`;
               },
               (err) => {
                 console.log("err --> ", err);
@@ -229,6 +231,22 @@ export class AppComponent {
           const lat = response['results'][0].geometry.location.lat;
           const lng = response['results'][0].geometry.location.lng;
           this.addMarker(loc,lat,lng);
+          const coords = this.allStations.map(s => s.lat + ',' + s.lng).join('|');
+          console.log(coords);
+          this.markerService.getDistance(String(lat), String(lng), coords)
+            .subscribe(
+              (data) => {
+                console.log("distances ---> ", data);
+                console.log("dist array --> ", data['rows'][0].elements);
+                const distArray = data['rows'][0].elements;
+                this.sortedDistances = distArray.map((d,i) => [Number((d.distance.text).slice(0,-3)), i])
+                  .sort((a,b) => a[0] - b[0]);
+                this.closestMessageDest = `The closest station to your destination is ${this.stationsObj[this.sortedDistances[0][1]]} and the distance is ${this.sortedDistances[0][0]} km.`;
+              },
+              (err) => {
+                console.log("err --> ", err);
+              }
+            )
         },
         (err) => {
           console.log(err);

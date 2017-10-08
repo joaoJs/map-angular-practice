@@ -28,6 +28,41 @@ export class AppComponent {
 
   closestMessageDest: string = '';
 
+  closestStOr: string = '';
+
+  closestStDest: string = '';
+
+  locOr: string = '';
+
+  latOr: number;
+
+  lngOr: number;
+
+  coords: string = '';
+
+  latDest: number;
+
+  lngDest: number;
+
+  locDest: string = '';
+
+  sortedDistancesOr: number[] = [];
+
+  sortedDistancesDest: number[] = [];
+
+  indexOr: number;
+
+  indexDest: number;
+
+  closestStOrLat: number;
+
+  closestStOrLng: number;
+
+  closestStDestLat: number;
+
+  closestStDestLng: number;
+
+
   constructor(
     private markerService: MarkerService
   ) {
@@ -174,8 +209,106 @@ export class AppComponent {
     this.markerService.removeMarker(index);
   }
 
-  submitOrigin() {
+
+  submitLocations() {
+
     this.markerService.getOrigin(this.locationName)
+      .subscribe(
+        (response) => {
+          console.log('response Origin --> ', response);
+          this.locOr = response['results'][0].formatted_address;
+          this.latOr = response['results'][0].geometry.location.lat;
+          this.lngOr = response['results'][0].geometry.location.lng;
+          this.addMarker(this.locOr,this.latOr,this.lngOr);
+          this.coords = this.allStations.map(s => s.lat + ',' + s.lng).join('|');
+
+          this.markerService.getDistance(String(this.latOr), String(this.lngOr), this.coords)
+            .subscribe(
+              (data) => {
+                console.log("distances ---> ", data);
+                console.log("dist array --> ", data['rows'][0].elements);
+                // get array of distances from response
+                const distArray = data['rows'][0].elements;
+                // sort array of distances, and pair the distances with their index
+                this.sortedDistancesOr = distArray.map((d,i) => [Number((d.distance.text).slice(0,-3)), i])
+                  .sort((a,b) => a[0] - b[0]);
+                this.indexOr = this.sortedDistancesOr[0][1];
+                this.closestStOr = this.stationsObj[this.indexOr];
+                this.closestMessageOrigin = `The closest station to your origin is ${this.closestStOr} and the distance is ${this.sortedDistancesOr[0][0]} km.`;
+
+                this.markerService.getDestination(this.destinationName)
+                  .subscribe(
+                    (response) => {
+                      this.locDest = response['results'][0].formatted_address;
+                      this.latDest = response['results'][0].geometry.location.lat;
+                      this.lngDest = response['results'][0].geometry.location.lng;
+                      this.addMarker(this.locDest,this.latDest,this.lngDest);
+                      //const coords = this.allStations.map(s => s.lat + ',' + s.lng).join('|');
+                      console.log(this.coords);
+                      this.markerService.getDistance(String(this.latDest), String(this.lngDest), this.coords)
+                        .subscribe(
+                          (data) => {
+                            console.log("distances Destination ---> ", data);
+                            console.log("dist array Dest --> ", data['rows'][0].elements);
+                            const distArray = data['rows'][0].elements;
+                            this.sortedDistancesDest = distArray.map((d,i) => [Number((d.distance.text).slice(0,-3)), i])
+                              .sort((a,b) => a[0] - b[0]);
+                            this.indexDest = this.sortedDistancesDest[0][1];
+                            this.closestStDest = this.stationsObj[this.indexDest];
+                            this.closestMessageDest = `The closest station to your destination is ${this.closestStDest} and the distance is ${this.sortedDistancesDest[0][0]} km.`;
+
+                            console.log('BOTH!!! HERE!!! ---> ', this.closestStOr, this.closestStDest);
+
+                            // now we need to get the closest stations' lat and lng
+                            this.closestStOrLat = this.allStations[this.indexOr]['lat'];
+                            this.closestStOrLng = this.allStations[this.indexOr]['lng'];
+                            this.closestStDestLat = this.allStations[this.indexDest]['lat'];
+                            this.closestStDestLng = this.allStations[this.indexDest]['lng'];
+
+                            console.log("closest Station origin lat ---> ", this.closestStOrLat);
+                            // now we need to query the distance between metro stations
+                            // but first we need to format the destination's coords
+                            const destCoords = this.closestStDestLat + ',' + this.closestStDestLng;
+
+                            this.markerService.getDistanceMetro(String(this.closestStOrLat), String(this.closestStOrLng), destCoords)
+                              .subscribe(
+                                (data) => {
+                                  console.log('HUala!! --> ', data);
+                                },
+                                (err) => {
+                                  console.log('err ---> ', err);
+                                }
+                              )
+
+                          },
+                          (err) => {
+                            console.log("err --> ", err);
+                          }
+                        )
+                    },
+                    (err) => {
+                      console.log(err);
+                    }
+                  )
+              },
+              (err) => {
+                console.log("err --> ", err);
+              }
+            )
+        },
+        (err) => {
+          console.log('err --> ', err);
+        }
+      )
+
+
+
+
+
+      /*  above is the test. Underneath is the original */
+
+  //function submitOrigin() {
+  /*  this.markerService.getOrigin(this.locationName)
       .subscribe(
         (response) => {
           const loc = response['results'][0].formatted_address;
@@ -192,9 +325,12 @@ export class AppComponent {
               (data) => {
                 console.log("distances ---> ", data);
                 console.log("dist array --> ", data['rows'][0].elements);
+                // get array of distances from response
                 const distArray = data['rows'][0].elements;
+                // sort array of distances, and pair the distances with their index
                 this.sortedDistances = distArray.map((d,i) => [Number((d.distance.text).slice(0,-3)), i])
                   .sort((a,b) => a[0] - b[0]);
+                //const closestSt = this.stationsObj[this.sortedDistances[0][1]];
                 this.closestMessageOrigin = `The closest station to your origin is ${this.stationsObj[this.sortedDistances[0][1]]} and the distance is ${this.sortedDistances[0][0]} km.`;
               },
               (err) => {
@@ -220,11 +356,11 @@ export class AppComponent {
         (err) => {
           console.log(err);
         }
-      )
-  }
+      ) */
+  //}
 
-  submitDestination() {
-    this.markerService.getDestination(this.destinationName)
+  //function submitDestination() {
+  /*  this.markerService.getDestination(this.destinationName)
       .subscribe(
         (response) => {
           const loc = response['results'][0].formatted_address;
@@ -251,7 +387,9 @@ export class AppComponent {
         (err) => {
           console.log(err);
         }
-      )
+      ) 263 */
+  //}
+
   }
 
 }

@@ -67,12 +67,10 @@
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title"> Origin </h3>
-        </div>
         <div class="panel-body">
-          <form (ngSubmit)="submitOrigin()">
-              <label> Location Name </label>
+          <hr>
+          <form (ngSubmit)="submitLocations()">
+              <label> Origin </label>
               <input type="text" [(ngModel)]="locationName" name="locationName">
 
               <label> Latitude </label>
@@ -88,17 +86,12 @@
                 <option value="Yes"> Yes</option>
 
               </select>
-              <button> Map it! </button>
-          </form>
-        </div>
-      </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title"> Destination </h3>
-        </div>
-        <div class="panel-body">
-          <form (ngSubmit)="submitDestination()">
-              <label> Location Name </label>
+              <br>
+              <!-- <div class="panel-heading">
+                <h3 class="panel-title"> Destination </h3>
+              </div> -->
+              <hr>
+              <label> Destination </label>
               <input type="text" [(ngModel)]="destinationName" name="destinationName">
 
               <label> Latitude </label>
@@ -114,7 +107,9 @@
                 <option value="Yes"> Yes</option>
 
               </select>
-              <button> Map it! </button>
+              <br>
+              <hr>
+              <button> Submit </button>
           </form>
         </div>
       </div>

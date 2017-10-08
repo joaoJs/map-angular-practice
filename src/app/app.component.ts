@@ -22,6 +22,8 @@ export class AppComponent {
 
   allDistances: number[] = [];
 
+  sortedDistances: number[] = [];
+
   constructor(
     private markerService: MarkerService
   ) {
@@ -33,20 +35,25 @@ export class AppComponent {
   lng: number = -80.1918;
   zoom: number = 10;
 
-  // markers: any[] = [
-  // {
-  //   name: "miami",
-  //   lat: this.lat,
-  //   lng: this.lng,
-  //   draggable: true
-  // },
-  // {
-  //   name: "sao paulo",
-  //   lat: -23.5505199,
-  //   lng: -46.63330939999999,
-  //   draggable: true
-  // }
-  // ];
+  stationsObj: any = {
+    0: "Miami Zoo",
+    1: "West Perrine Park",
+    2: "Jackson South Medical Center",
+    3: "The Falls",
+    4: "Dadeland South",
+    5: "Dadeland North",
+    6: "South Miami",
+    7: "University",
+    8: "Douglas Road",
+    9: "Coconut Grove",
+    10: "Vizcaya",
+    11: "Brickell",
+    12: "Government Center",
+    13: "Historic Overtown",
+    14: "Wynwood Walls",
+    15: "Buena Vista Blvd",
+    16: "Design District"
+  }
 
    stations: any[] = [
        {lat: 25.7810171, lng: -80.19628360000002},
@@ -180,6 +187,11 @@ export class AppComponent {
             .subscribe(
               (data) => {
                 console.log("distances ---> ", data);
+                console.log("dist array --> ", data['rows'][0].elements);
+                const distArray = data['rows'][0].elements;
+                this.sortedDistances = distArray.map((d,i) => [Number((d.distance.text).slice(0,-3)), i])
+                  .sort((a,b) => a[0] - b[0]);
+                console.log(`The closest station is ${this.stationsObj[this.sortedDistances[0][1]]}.`);
               },
               (err) => {
                 console.log("err --> ", err);

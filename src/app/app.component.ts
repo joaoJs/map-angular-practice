@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { MarkerService } from './services/marker.service';
 
+declare var google: any;
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -270,7 +272,7 @@ export class AppComponent {
                             // but first we need to format the destination's coords
                             const destCoords = this.closestStDestLat + ',' + this.closestStDestLng;
 
-                            this.markerService.getDistanceMetro(String(this.closestStOrLat), String(this.closestStOrLng), destCoords)
+                            /*this.markerService.getDistanceMetro(String(this.closestStOrLat), String(this.closestStOrLng), destCoords)
                               .subscribe(
                                 (data) => {
                                   console.log('HUala!! --> ', data);
@@ -278,7 +280,11 @@ export class AppComponent {
                                 (err) => {
                                   console.log('err ---> ', err);
                                 }
-                              )
+                              )*/
+                              const stA = new google.maps.LatLng(this.closestStOrLat, this.closestStOrLng);
+                              const stB = new google.maps.LatLng(this.closestStDestLat, this.closestStDestLng);
+                              const distance = google.maps.geometry.spherical.computeDistanceBetween(stA, stB);
+                              console.log("NYC --> ", distance);
 
                           },
                           (err) => {

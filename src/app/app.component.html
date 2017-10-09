@@ -73,8 +73,12 @@
               <label> Origin </label>
               <input type="text" [(ngModel)]="locationName" name="locationName">
 
-              <label> Latitude </label>
-              <input type="text" [(ngModel)]="markerLat" name="markerLat">
+              <select [(ngModel)]="travelModeOr" name="travelModeOr">
+                <option value="bicycling">Bike</option>
+                <option value="driving">Car</option>
+                <option value="transit">Bus</option>
+                <option value="walking">Walk</option>
+              </select>
 
               <label> Longitude </label>
               <input type="text" [(ngModel)]="markerLng" name="markerLng">
@@ -94,8 +98,12 @@
               <label> Destination </label>
               <input type="text" [(ngModel)]="destinationName" name="destinationName">
 
-              <label> Latitude </label>
-              <input type="text" [(ngModel)]="markerLat" name="markerLat">
+              <select [(ngModel)]="travelModeDest" name="travelModeDest">
+                <option value="bicycling">Bike</option>
+                <option value="driving">Car</option>
+                <option value="transit">Bus</option>
+                <option value="walking">Walk</option>
+              </select>
 
               <label> Longitude </label>
               <input type="text" [(ngModel)]="markerLng" name="markerLng">
@@ -122,6 +130,10 @@
 
   <div *ngIf="closestMessageDest !== ''">
     <p>{{closestMessageDest}}</p>
+  </div>
+
+  <div *ngIf="completeDistMessage !== ''">
+    <p>{{completeDistMessage}}</p>
   </div>
 
   <!-- AIzaSyBZmlw9qWUNZvc1jbUEZ8HQXHGTHXe3Jm4 -->

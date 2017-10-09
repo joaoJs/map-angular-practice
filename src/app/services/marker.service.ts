@@ -62,9 +62,9 @@ export class MarkerService extends Init {
       return this.http.get(this.geoUrl + 'address=' + location + '&key=' + this.key);
     }
 
-    getDistance(lat: string, lng: string, coords: string) {
+    getDistance(lat: string, lng: string, coords: string, mode: string) {
       //return this.http.get(this.distanceUrl + 'origins=' + lat + ',' + lng + '&destinations=' + lat2 + ',' + lng2 + '&key=' + this.key);
-      return this.http.get(this.distanceUrl + 'origins=' + lat + ',' + lng + '&destinations=' + coords + '&key=' + this.key);
+      return this.http.get(this.distanceUrl + 'origins=' + lat + ',' + lng + '&destinations=' + coords + '&mode=' + mode + '&key=' + this.key);
     }
 
     getDistanceMetro(lat: string, lng: string, coords: string) {

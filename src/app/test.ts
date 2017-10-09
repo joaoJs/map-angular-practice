@@ -114,3 +114,108 @@ function getMeters(i) {
 }
 
 */
+
+
+
+/*  above is the test. Underneath is the original */
+
+//function submitOrigin() {
+/*  this.markerService.getOrigin(this.locationName)
+.subscribe(
+  (response) => {
+    const loc = response['results'][0].formatted_address;
+    const lat = response['results'][0].geometry.location.lat;
+    const lng = response['results'][0].geometry.location.lng;
+    this.addMarker(loc,lat,lng);
+    // find closest station from origin and display distance
+    //const allStations = this.newStations.concat(this.newStationsNorth).concat(this.stations);
+    const coords = this.allStations.map(s => s.lat + ',' + s.lng).join('|');
+    console.log(coords);
+    //console.log(coords.join('|'));
+    this.markerService.getDistance(String(lat), String(lng), coords)
+      .subscribe(
+        (data) => {
+          console.log("distances ---> ", data);
+          console.log("dist array --> ", data['rows'][0].elements);
+          // get array of distances from response
+          const distArray = data['rows'][0].elements;
+          // sort array of distances, and pair the distances with their index
+          this.sortedDistances = distArray.map((d,i) => [Number((d.distance.text).slice(0,-3)), i])
+            .sort((a,b) => a[0] - b[0]);
+          //const closestSt = this.stationsObj[this.sortedDistances[0][1]];
+          this.closestMessageOrigin = `The closest station to your origin is ${this.stationsObj[this.sortedDistances[0][1]]} and the distance is ${this.sortedDistances[0][0]} km.`;
+        },
+        (err) => {
+          console.log("err --> ", err);
+        }
+      )
+    // allStations.forEach(s=> {
+    //   this.markerService.getDistance(String(lat),String(lng),String(s.lat), String(s.lng))
+    //     .subscribe(
+    //       (data) => {
+    //         console.log("Distance data! ---> ", data);
+    //         console.log('Distance --> ', data['rows'][0].elements[0].distance.text);
+    //         const dist = (data['rows'][0].elements[0].distance.text).slice(0,-3);
+    //         console.log("Dist ---> ", dist);
+    //         this.allDistances.push(Number(data['rows'][0].elements[0].distance.text));
+    //       },
+    //       (err) => {
+    //         console.log(err);
+    //       }
+    //     )
+    // });
+  },
+  (err) => {
+    console.log(err);
+  }
+) */
+//}
+
+//function submitDestination() {
+/*  this.markerService.getDestination(this.destinationName)
+.subscribe(
+  (response) => {
+    const loc = response['results'][0].formatted_address;
+    const lat = response['results'][0].geometry.location.lat;
+    const lng = response['results'][0].geometry.location.lng;
+    this.addMarker(loc,lat,lng);
+    const coords = this.allStations.map(s => s.lat + ',' + s.lng).join('|');
+    console.log(coords);
+    this.markerService.getDistance(String(lat), String(lng), coords)
+      .subscribe(
+        (data) => {
+          console.log("distances ---> ", data);
+          console.log("dist array --> ", data['rows'][0].elements);
+          const distArray = data['rows'][0].elements;
+          this.sortedDistances = distArray.map((d,i) => [Number((d.distance.text).slice(0,-3)), i])
+            .sort((a,b) => a[0] - b[0]);
+          this.closestMessageDest = `The closest station to your destination is ${this.stationsObj[this.sortedDistances[0][1]]} and the distance is ${this.sortedDistances[0][0]} km.`;
+        },
+        (err) => {
+          console.log("err --> ", err);
+        }
+      )
+  },
+  (err) => {
+    console.log(err);
+  }
+) 263 */
+//}
+
+
+
+
+
+/*this.markerService.getDistanceMetro(String(this.closestStOrLat), String(this.closestStOrLng), destCoords)
+  .subscribe(
+    (data) => {
+      console.log('HUala!! --> ', data);
+    },
+    (err) => {
+      console.log('err ---> ', err);
+    }
+  )*/
+  /*const stA = new google.maps.LatLng(this.closestStOrLat, this.closestStOrLng);
+  const stB = new google.maps.LatLng(this.closestStDestLat, this.closestStDestLng);
+  const distance = google.maps.geometry.spherical.computeDistanceBetween(stA, stB);
+  console.log("NYC --> ", distance);*/

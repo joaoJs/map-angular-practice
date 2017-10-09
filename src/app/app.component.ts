@@ -74,6 +74,11 @@ export class AppComponent {
 
   distSt: number;
 
+  completeDistMessage: string = '';
+
+  travelModeOr: string = '';
+
+  travelModeDest: string = '';
 
   constructor(
     private markerService: MarkerService
@@ -308,13 +313,14 @@ export class AppComponent {
       .subscribe(
         (response) => {
           console.log('response Origin --> ', response);
+          console.log("TRAVEL MODE!! ---->", this.travelModeOr);
           this.locOr = response['results'][0].formatted_address;
           this.latOr = response['results'][0].geometry.location.lat;
           this.lngOr = response['results'][0].geometry.location.lng;
           this.addMarker(this.locOr,this.latOr,this.lngOr);
           this.coords = this.allStations.map(s => s.lat + ',' + s.lng).join('|');
 
-          this.markerService.getDistance(String(this.latOr), String(this.lngOr), this.coords)
+          this.markerService.getDistance(String(this.latOr), String(this.lngOr), this.coords, this.travelModeOr)
             .subscribe(
               (data) => {
                 console.log("distances ---> ", data);
@@ -338,7 +344,7 @@ export class AppComponent {
                       this.addMarker(this.locDest,this.latDest,this.lngDest);
                       //const coords = this.allStations.map(s => s.lat + ',' + s.lng).join('|');
                       console.log(this.coords);
-                      this.markerService.getDistance(String(this.latDest), String(this.lngDest), this.coords)
+                      this.markerService.getDistance(String(this.latDest), String(this.lngDest), this.coords, this.travelModeDest)
                         .subscribe(
                           (data) => {
                             console.log("distances Destination ---> ", data);
@@ -364,19 +370,6 @@ export class AppComponent {
                             // but first we need to format the destination's coords
                             const destCoords = this.closestStDestLat + ',' + this.closestStDestLng;
 
-                            /*this.markerService.getDistanceMetro(String(this.closestStOrLat), String(this.closestStOrLng), destCoords)
-                              .subscribe(
-                                (data) => {
-                                  console.log('HUala!! --> ', data);
-                                },
-                                (err) => {
-                                  console.log('err ---> ', err);
-                                }
-                              )*/
-                              /*const stA = new google.maps.LatLng(this.closestStOrLat, this.closestStOrLng);
-                              const stB = new google.maps.LatLng(this.closestStDestLat, this.closestStDestLng);
-                              const distance = google.maps.geometry.spherical.computeDistanceBetween(stA, stB);
-                              console.log("NYC --> ", distance);*/
                               const arrToCalc = this.stationsArray.slice(this.indexOr, this.indexDest);
 
                               let dist = 0;
@@ -390,6 +383,9 @@ export class AppComponent {
                               this.distSt = this.getMiles(dist);
                               this.completeDist = this.distOr + this.distDest + this.distSt;
                               console.log('COMPLETE! ---> ', this.completeDist);
+                              this.completeDistMessage = `Your total trajectory is ${this.completeDist} miles long.
+                                                          You need to walk ${this.distOr} miles towards ${this.closestStOr} station and
+                                                          ${this.distDest} from ${this.closestStDest} station to ${this.locDest}`;
 
                           },
                           (err) => {
@@ -411,95 +407,6 @@ export class AppComponent {
           console.log('err --> ', err);
         }
       )
-
-
-
-
-
-      /*  above is the test. Underneath is the original */
-
-  //function submitOrigin() {
-  /*  this.markerService.getOrigin(this.locationName)
-      .subscribe(
-        (response) => {
-          const loc = response['results'][0].formatted_address;
-          const lat = response['results'][0].geometry.location.lat;
-          const lng = response['results'][0].geometry.location.lng;
-          this.addMarker(loc,lat,lng);
-          // find closest station from origin and display distance
-          //const allStations = this.newStations.concat(this.newStationsNorth).concat(this.stations);
-          const coords = this.allStations.map(s => s.lat + ',' + s.lng).join('|');
-          console.log(coords);
-          //console.log(coords.join('|'));
-          this.markerService.getDistance(String(lat), String(lng), coords)
-            .subscribe(
-              (data) => {
-                console.log("distances ---> ", data);
-                console.log("dist array --> ", data['rows'][0].elements);
-                // get array of distances from response
-                const distArray = data['rows'][0].elements;
-                // sort array of distances, and pair the distances with their index
-                this.sortedDistances = distArray.map((d,i) => [Number((d.distance.text).slice(0,-3)), i])
-                  .sort((a,b) => a[0] - b[0]);
-                //const closestSt = this.stationsObj[this.sortedDistances[0][1]];
-                this.closestMessageOrigin = `The closest station to your origin is ${this.stationsObj[this.sortedDistances[0][1]]} and the distance is ${this.sortedDistances[0][0]} km.`;
-              },
-              (err) => {
-                console.log("err --> ", err);
-              }
-            )
-          // allStations.forEach(s=> {
-          //   this.markerService.getDistance(String(lat),String(lng),String(s.lat), String(s.lng))
-          //     .subscribe(
-          //       (data) => {
-          //         console.log("Distance data! ---> ", data);
-          //         console.log('Distance --> ', data['rows'][0].elements[0].distance.text);
-          //         const dist = (data['rows'][0].elements[0].distance.text).slice(0,-3);
-          //         console.log("Dist ---> ", dist);
-          //         this.allDistances.push(Number(data['rows'][0].elements[0].distance.text));
-          //       },
-          //       (err) => {
-          //         console.log(err);
-          //       }
-          //     )
-          // });
-        },
-        (err) => {
-          console.log(err);
-        }
-      ) */
-  //}
-
-  //function submitDestination() {
-  /*  this.markerService.getDestination(this.destinationName)
-      .subscribe(
-        (response) => {
-          const loc = response['results'][0].formatted_address;
-          const lat = response['results'][0].geometry.location.lat;
-          const lng = response['results'][0].geometry.location.lng;
-          this.addMarker(loc,lat,lng);
-          const coords = this.allStations.map(s => s.lat + ',' + s.lng).join('|');
-          console.log(coords);
-          this.markerService.getDistance(String(lat), String(lng), coords)
-            .subscribe(
-              (data) => {
-                console.log("distances ---> ", data);
-                console.log("dist array --> ", data['rows'][0].elements);
-                const distArray = data['rows'][0].elements;
-                this.sortedDistances = distArray.map((d,i) => [Number((d.distance.text).slice(0,-3)), i])
-                  .sort((a,b) => a[0] - b[0]);
-                this.closestMessageDest = `The closest station to your destination is ${this.stationsObj[this.sortedDistances[0][1]]} and the distance is ${this.sortedDistances[0][0]} km.`;
-              },
-              (err) => {
-                console.log("err --> ", err);
-              }
-            )
-        },
-        (err) => {
-          console.log(err);
-        }
-      ) 263 */
-  //}
 
   }
 

@@ -73,6 +73,7 @@
               <label> Origin </label>
               <input type="text" [(ngModel)]="locationName" name="locationName">
 
+              <label> Travel mode until metro</label>
               <select [(ngModel)]="travelModeOr" name="travelModeOr">
                 <option value="bicycling">Bike</option>
                 <option value="driving">Car</option>
@@ -80,16 +81,6 @@
                 <option value="walking">Walk</option>
               </select>
 
-              <label> Longitude </label>
-              <input type="text" [(ngModel)]="markerLng" name="markerLng">
-
-              <label> Draggable </label>
-              <select [(ngModel)]="markerDraggable" name="markerDraggable">
-
-                <option value="No"> No</option>
-                <option value="Yes"> Yes</option>
-
-              </select>
               <br>
               <!-- <div class="panel-heading">
                 <h3 class="panel-title"> Destination </h3>
@@ -98,6 +89,7 @@
               <label> Destination </label>
               <input type="text" [(ngModel)]="destinationName" name="destinationName">
 
+              <label> Travel mode from metro </label>
               <select [(ngModel)]="travelModeDest" name="travelModeDest">
                 <option value="bicycling">Bike</option>
                 <option value="driving">Car</option>
@@ -105,16 +97,6 @@
                 <option value="walking">Walk</option>
               </select>
 
-              <label> Longitude </label>
-              <input type="text" [(ngModel)]="markerLng" name="markerLng">
-
-              <label> Draggable </label>
-              <select [(ngModel)]="markerDraggable" name="markerDraggable">
-
-                <option value="No"> No</option>
-                <option value="Yes"> Yes</option>
-
-              </select>
               <br>
               <hr>
               <button> Submit </button>
@@ -135,6 +117,10 @@
   <div *ngIf="completeDistMessage !== ''">
     <p>{{completeDistMessage}}</p>
   </div>
+
+  <form (ngSubmit)="clearMarkers()">
+    <button> Clear Storage</button>
+  </form>
 
   <!-- AIzaSyBZmlw9qWUNZvc1jbUEZ8HQXHGTHXe3Jm4 -->
 

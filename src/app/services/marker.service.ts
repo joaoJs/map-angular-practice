@@ -54,6 +54,10 @@ export class MarkerService extends Init {
       localStorage.setItem('markers', JSON.stringify(markers));
     }
 
+    clearLocalStorage() {
+      localStorage.clear();
+    }
+
     getOrigin(location: string) {
       return this.http.get(this.geoUrl + 'address=' + location + '&key=' + this.key);
     }

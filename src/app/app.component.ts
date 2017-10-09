@@ -66,6 +66,14 @@ export class AppComponent {
 
   closestStDestLng: number;
 
+  completeDist: number = 0;
+
+  distDest: number;
+
+  distOr: number;
+
+  distSt: number;
+
 
   constructor(
     private markerService: MarkerService
@@ -318,7 +326,8 @@ export class AppComponent {
                   .sort((a,b) => a[0] - b[0]);
                 this.indexOr = this.sortedDistancesOr[0][1];
                 this.closestStOr = this.stationsObj[this.indexOr];
-                this.closestMessageOrigin = `The closest station to your origin is ${this.closestStOr} and the distance is ${this.kmToMiles(this.sortedDistancesOr[0][0])} miles.`;
+                this.distOr = this.kmToMiles(this.sortedDistancesOr[0][0]);
+                this.closestMessageOrigin = `The closest station to your origin is ${this.closestStOr} and the distance is ${this.distOr} miles.`;
 
                 this.markerService.getDestination(this.destinationName)
                   .subscribe(
@@ -339,7 +348,8 @@ export class AppComponent {
                               .sort((a,b) => a[0] - b[0]);
                             this.indexDest = this.sortedDistancesDest[0][1];
                             this.closestStDest = this.stationsObj[this.indexDest];
-                            this.closestMessageDest = `The closest station to your destination is ${this.closestStDest} and the distance is ${this.kmToMiles(this.sortedDistancesDest[0][0])} miles.`;
+                            this.distDest = this.kmToMiles(this.sortedDistancesDest[0][0]);
+                            this.closestMessageDest = `The closest station to your destination is ${this.closestStDest} and the distance is ${this.distDest} miles.`;
 
                             console.log('BOTH!!! HERE!!! ---> ', this.closestStOr, this.closestStDest);
 
@@ -377,6 +387,9 @@ export class AppComponent {
                               });
 
                               console.log("DIST! ----> ", this.getMiles(dist));
+                              this.distSt = this.getMiles(dist);
+                              this.completeDist = this.distOr + this.distDest + this.distSt;
+                              console.log('COMPLETE! ---> ', this.completeDist);
 
                           },
                           (err) => {

@@ -3,6 +3,8 @@ import { MarkerService } from './services/marker.service';
 
 declare var google: any;
 
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -96,6 +98,78 @@ export class AppComponent {
     16: "Design District"
   }
 
+  stationsArray: any[] = [
+    {name: "Miami Zoo",
+     latLng: {lat: 25.6071269, lng: -80.39927949999999},
+     distToNext: 3965.0607739911657
+    },
+    {name: "West Perrine Park",
+     latLng: {lat: 25.6071269, lng: -80.39927949999999},
+     distToNext: 2588.6435220066046
+    },
+    {name: "Jackson South Medical Center",
+     latLng: {lat: 25.6071269, lng: -80.39927949999999},
+     distToNext: 1766.9788734494489
+    },
+    {name: "The Falls",
+     latLng: {lat: 25.6071269, lng: -80.39927949999999},
+     distToNext: 5174.801754946771
+    },
+    {name: "Dadeland South",
+    latLng: {lat: 25.6071269, lng: -80.39927949999999},
+    distToNext: 1151.9046000681071
+    },
+    {name: "Dadeland North",
+    latLng: {lat: 25.6071269, lng: -80.39927949999999},
+    distToNext: 2179.366329036528
+    },
+    {name: "South Miami",
+    latLng: {lat: 25.6071269, lng: -80.39927949999999},
+    distToNext: 15535.202538687874
+    },
+    {name: "University",
+    latLng: {lat: 25.6071269, lng: -80.39927949999999},
+    distToNext: 20139.1738466162
+    },
+    {name: "Douglas Road",
+    latLng: {lat: 25.6071269, lng: -80.39927949999999},
+    distToNext: 1783.5647563096068
+    },
+    {name: "Coconut Grove",
+    latLng: {lat: 25.6071269, lng: -80.39927949999999},
+    distToNext: 2933.348538064533
+    },
+    {name: "Vizcaya",
+    latLng: {lat: 25.6071269, lng: -80.39927949999999},
+    distToNext: 2271.02809886992
+    },
+    {name: "Brickell",
+    latLng: {lat: 25.6071269, lng: -80.39927949999999},
+    distToNext: 1357.7921838766856
+    },
+    {name: "Government Center",
+    latLng: {lat: 25.6071269, lng: -80.39927949999999},
+    distToNext: 555.1647618017228
+    },
+    {name: "Historic Overtown",
+    latLng: {lat: 25.6071269, lng: -80.39927949999999},
+    distToNext: 2278.341256191722
+    },
+    {name: "Wynwood Walls",
+    latLng: {lat: 25.6071269, lng: -80.39927949999999},
+    distToNext: 1017.56076304776
+    },
+    {name: "Buena Vista Blvd",
+    latLng: {lat: 25.6071269, lng: -80.39927949999999},
+    distToNext: 587.620711041291
+    },
+    {name: "Design District",
+    latLng: {lat: 25.6071269, lng: -80.39927949999999},
+    distToNext: 0
+    }
+];
+
+
    stations: any[] = [
        {lat: 25.7810171, lng: -80.19628360000002},
        {lat: 25.776034, lng: -80.196061},
@@ -143,6 +217,14 @@ export class AppComponent {
       {lat: 25.8081475, lng: -80.1936675},
       {lat: 25.8134218, lng: -80.1934285}
     ];
+
+    getMiles(i) {
+        return i*0.000621371192;
+    }
+
+    kmToMiles(i) {
+        return i*0.621371;
+    }
 
   newMarker: any = {};
 
@@ -236,7 +318,7 @@ export class AppComponent {
                   .sort((a,b) => a[0] - b[0]);
                 this.indexOr = this.sortedDistancesOr[0][1];
                 this.closestStOr = this.stationsObj[this.indexOr];
-                this.closestMessageOrigin = `The closest station to your origin is ${this.closestStOr} and the distance is ${this.sortedDistancesOr[0][0]} km.`;
+                this.closestMessageOrigin = `The closest station to your origin is ${this.closestStOr} and the distance is ${this.kmToMiles(this.sortedDistancesOr[0][0])} miles.`;
 
                 this.markerService.getDestination(this.destinationName)
                   .subscribe(
@@ -257,7 +339,7 @@ export class AppComponent {
                               .sort((a,b) => a[0] - b[0]);
                             this.indexDest = this.sortedDistancesDest[0][1];
                             this.closestStDest = this.stationsObj[this.indexDest];
-                            this.closestMessageDest = `The closest station to your destination is ${this.closestStDest} and the distance is ${this.sortedDistancesDest[0][0]} km.`;
+                            this.closestMessageDest = `The closest station to your destination is ${this.closestStDest} and the distance is ${this.kmToMiles(this.sortedDistancesDest[0][0])} miles.`;
 
                             console.log('BOTH!!! HERE!!! ---> ', this.closestStOr, this.closestStDest);
 
@@ -281,10 +363,20 @@ export class AppComponent {
                                   console.log('err ---> ', err);
                                 }
                               )*/
-                              const stA = new google.maps.LatLng(this.closestStOrLat, this.closestStOrLng);
+                              /*const stA = new google.maps.LatLng(this.closestStOrLat, this.closestStOrLng);
                               const stB = new google.maps.LatLng(this.closestStDestLat, this.closestStDestLng);
                               const distance = google.maps.geometry.spherical.computeDistanceBetween(stA, stB);
-                              console.log("NYC --> ", distance);
+                              console.log("NYC --> ", distance);*/
+                              const arrToCalc = this.stationsArray.slice(this.indexOr, this.indexDest);
+
+                              let dist = 0;
+
+                              arrToCalc.forEach(s => {
+                                console.log(s.distToNext);
+                                dist += s.distToNext;
+                              });
+
+                              console.log("DIST! ----> ", this.getMiles(dist));
 
                           },
                           (err) => {
